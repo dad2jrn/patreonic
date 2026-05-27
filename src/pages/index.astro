@@ -1,0 +1,43 @@
+---
+import { landingSections } from "../content/sections";
+import "../styles/global.css";
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Patreonic — Creator membership landing template</title>
+        <meta
+            name="description"
+            content="Patreonic is an Astro-first landing template for creator-platform and membership SaaS teams."
+        />
+    </head>
+    <body>
+        <main class="page-shell">
+            {
+                landingSections.map((section) => (
+                    <section
+                        id={section.id}
+                        data-theme={section.backgroundTheme}
+                        class="page-section"
+                    >
+                        <p class="section-kicker">
+                            Patreonic / {section.navLabel}
+                        </p>
+                        <h1>
+                            {section.id === "hero"
+                                ? "A premium Astro landing shell for creator memberships."
+                                : `${section.navLabel} foundation`}
+                        </h1>
+                        <p>
+                            Placeholder section for the Patreonic single-page
+                            shell, ready for original creator-economy content
+                            and motion polish.
+                        </p>
+                    </section>
+                ))
+            }
+        </main>
+    </body>
+</html>

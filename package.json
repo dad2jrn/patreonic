@@ -1,0 +1,29 @@
+{
+    "name": "patreonic",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "astro dev",
+        "build": "astro build",
+        "test": "vitest run",
+        "verify": "npm run test && npm run typecheck && npm run build",
+        "typecheck": "astro check"
+    },
+    "dependencies": {
+        "@astrojs/react": "^5.0.5",
+        "@tailwindcss/vite": "^4.3.0",
+        "astro": "^6.3.8",
+        "gsap": "^3.14.2",
+        "motion": "^13.0.0-alpha.0",
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3",
+        "tailwindcss": "^4.3.0"
+    },
+    "devDependencies": {
+        "@astrojs/check": "^0.9.9",
+        "typescript": "^6.0.3",
+        "vite": "^7.3.3",
+        "vitest": "^4.1.7"
+    }
+}
