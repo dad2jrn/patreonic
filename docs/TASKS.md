@@ -259,7 +259,7 @@ Notes:
 #### 011 — Design review against Patreon-inspired boundary
 
 - Type: HITL
-- Status: Ready after 006, 007, 008, and 009
+- Status: Review packet prepared; awaiting human reviewer
 - Blocked by:
   - 006 — Implement hero visual composition and pointer motion system
   - 007 — Implement scroll-linked atmosphere/background system
@@ -275,6 +275,12 @@ Acceptance criteria:
 - [ ] Human reviewer confirms hero/header/background interactions meet the intended Patreon-inspired behavior category.
 - [ ] Human reviewer confirms copy, visual assets, color system, typography, and layout details are distinguishable from Patreon.
 - [ ] Any required design-boundary adjustments are documented as follow-up tasks.
+
+Notes:
+- Design review packet prepared in `docs/DESIGN_REVIEW.md`.
+- Implemented with TDD design-boundary review tests in `tests/story-011-design-boundary-review.test.mjs`.
+- Homepage design-boundary markers live in `src/pages/index.astro` via `data-design-review`, `data-originality-boundary`, and `data-interaction-category` attributes.
+- Story 011 remains HITL until a human reviewer confirms or requests adjustments.
 
 #### 012 — Documentation and handoff update
 

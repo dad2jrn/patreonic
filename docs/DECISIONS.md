@@ -170,3 +170,18 @@ Reason:
 Consequences:
 - Browser-based Lighthouse review remains a human/release activity, especially for final desktop/mobile scoring.
 - Future interactive islands should be justified against the limited-hydration quality gate and covered by tests/docs when introduced.
+
+### 2026-05-28 - Story 011 design review packet
+
+Decision:
+- Patreonic now has a human design-review packet in `docs/DESIGN_REVIEW.md` that separates inspiration criteria from originality guardrails.
+- The homepage records the intended review boundary with `data-design-review="patreon-inspired-original"`, `data-originality-boundary="no-copied-assets"`, and `data-interaction-category="creator-economy-premium"`.
+- Story 011 remains a human-in-the-loop task; tests verify that the review packet and observable review contracts exist, not that a human reviewer has approved the design.
+
+Reason:
+- Story 011 requires human judgment about whether the template feels premium and creator-economy oriented while remaining distinguishable from Patreon.
+- A review packet makes the human reviewer decision explicit, repeatable, and documentable without falsely automating subjective design/legal/trade-dress judgment.
+
+Consequences:
+- A human reviewer must still approve or request adjustments before Story 011 acceptance criteria can be checked off.
+- Any requested boundary adjustments should be documented in `docs/DESIGN_REVIEW.md` before implementation changes are made.

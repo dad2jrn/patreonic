@@ -286,6 +286,15 @@ a {
     text-align: center;
 }
 
+.review-boundary-note {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
 .page-section {
     min-height: 85vh;
     max-width: 72rem;
