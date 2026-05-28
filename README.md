@@ -50,3 +50,10 @@ Run the full local verification gate:
 ```sh
 npm run verify
 ```
+
+## Quality gates
+
+- `npm run verify` runs the complete local gate: tests, Astro type checks, and production build.
+- The template keeps hydration limited to the static Astro shell plus the inline interaction script; no React client island is required for the current landing page.
+- Motion is Lighthouse-oriented: interactive effects prefer `transform` and `opacity`, scroll work is scheduled with `requestAnimationFrame`, and scroll listeners are passive where possible.
+- Visual cards and atmosphere layers use local CSS/HTML primitives, so no mandatory third-party image service or external asset dependency is required.

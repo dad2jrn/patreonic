@@ -151,7 +151,7 @@ Notes:
 #### 007 — Implement scroll-linked atmosphere/background system
 
 - Type: AFK
-- Status: Ready after 002 and 003
+- Status: Completed
 - Blocked by:
   - 002 — Build design tokens, page shell, and section registry
   - 003 — Create static landing-page content skeleton
@@ -161,16 +161,22 @@ What to build:
 - Implement section-driven background theme transitions and atmospheric layers that shift smoothly as the user scrolls through the landing page.
 
 Acceptance criteria:
-- [ ] Major sections declare background themes through the section registry or equivalent metadata.
-- [ ] Page background transitions smoothly between section themes during scroll.
-- [ ] Atmospheric gradient/blob/noise layers are original and performant.
-- [ ] Reduced-motion preference simplifies or disables scroll-linked motion.
-- [ ] Scroll behavior avoids layout thrashing and favors transform/opacity updates.
+- [x] Major sections declare background themes through the section registry or equivalent metadata.
+- [x] Page background transitions smoothly between section themes during scroll.
+- [x] Atmospheric gradient/blob/noise layers are original and performant.
+- [x] Reduced-motion preference simplifies or disables scroll-linked motion.
+- [x] Scroll behavior avoids layout thrashing and favors transform/opacity updates.
+
+Notes:
+- Implemented with TDD scroll atmosphere tests in `tests/story-007-scroll-atmosphere.test.mjs`.
+- Section background themes continue to live in `src/content/sections.ts` and render as `data-theme` attributes in `src/pages/index.astro`.
+- The fixed atmospheric layer and theme/blob treatments live in `src/styles/global.css`, while scroll progress updates use `requestAnimationFrame` and CSS custom properties.
+- Verification command: `npm run verify`.
 
 #### 008 — Add section-level interaction polish
 
 - Type: AFK
-- Status: Ready after 003, 004, and 007
+- Status: Completed
 - Blocked by:
   - 003 — Create static landing-page content skeleton
   - 004 — Build generated media card system and visual collage primitives
@@ -181,16 +187,22 @@ What to build:
 - Add Motion-enhanced interactions to supporting sections, including feature cards, use-case cards, testimonials, FAQ panels, tier preview, and final CTA.
 
 Acceptance criteria:
-- [ ] Interactive cards have polished hover/focus/tap transitions where appropriate.
-- [ ] FAQ panels can open and close accessibly.
-- [ ] Testimonials, tiers, and CTA areas include tasteful motion without obscuring content.
-- [ ] Reduced-motion preference reduces or disables nonessential motion.
-- [ ] Interactions remain usable on desktop and mobile.
+- [x] Interactive cards have polished hover/focus/tap transitions where appropriate.
+- [x] FAQ panels can open and close accessibly.
+- [x] Testimonials, tiers, and CTA areas include tasteful motion without obscuring content.
+- [x] Reduced-motion preference reduces or disables nonessential motion.
+- [x] Interactions remain usable on desktop and mobile.
+
+Notes:
+- Implemented with TDD section interaction tests in `tests/story-008-section-interaction-polish.test.mjs`.
+- Supporting sections render `data-section-interaction` hooks, native FAQ `<details>` panels, and interaction-kind metadata through `src/pages/index.astro`.
+- Hover/focus/tap, section entrance, tier/testimonial/final CTA treatments, coarse-pointer behavior, and reduced-motion fallbacks live in `src/styles/global.css` plus the existing inline GSAP page script.
+- Verification command: `npm run verify`.
 
 #### 009 — Accessibility and keyboard interaction hardening
 
 - Type: AFK
-- Status: Ready after 005, 006, 007, and 008
+- Status: Completed
 - Blocked by:
   - 005 — Implement adaptive sticky header navigation
   - 006 — Implement hero visual composition and pointer motion system
@@ -202,17 +214,23 @@ What to build:
 - Audit and harden semantic structure, keyboard navigation, focus handling, reduced-motion behavior, and contrast across the animated landing template.
 
 Acceptance criteria:
-- [ ] Page uses semantic landmarks and meaningful section structure.
-- [ ] Header dropdowns, mobile menu, and FAQ are keyboard-operable.
-- [ ] Visible focus states are present for interactive controls.
-- [ ] Reduced-motion behavior is verified for hero, header, section, and background interactions.
-- [ ] Contrast is reviewed across all background themes.
-- [ ] No essential content is conveyed only by animation.
+- [x] Page uses semantic landmarks and meaningful section structure.
+- [x] Header dropdowns, mobile menu, and FAQ are keyboard-operable.
+- [x] Visible focus states are present for interactive controls.
+- [x] Reduced-motion behavior is verified for hero, header, section, and background interactions.
+- [x] Contrast is reviewed across all background themes.
+- [x] No essential content is conveyed only by animation.
+
+Notes:
+- Implemented with TDD accessibility hardening tests in `tests/story-009-accessibility-hardening.test.mjs`.
+- Semantic landmarks, skip link, labelled sections, essential-content markers, and mobile menu focus handling live in `src/pages/index.astro`.
+- Skip-link, focus, contrast, and reduced-motion hardening live in `src/styles/global.css`.
+- Verification command: `npm run verify`.
 
 #### 010 — Performance, build, and quality gate pass
 
 - Type: AFK
-- Status: Ready after 005, 006, 007, 008, and 009
+- Status: Completed
 - Blocked by:
   - 005 — Implement adaptive sticky header navigation
   - 006 — Implement hero visual composition and pointer motion system
@@ -225,12 +243,18 @@ What to build:
 - Verify production build quality, test coverage, hydration scope, GPU-friendly animation behavior, and Lighthouse-oriented performance readiness.
 
 Acceptance criteria:
-- [ ] Production build completes successfully.
-- [ ] Tests/checks pass for implemented modules.
-- [ ] Initial JavaScript and hydration are limited to high-value interactive islands.
-- [ ] Animations primarily use transform and opacity rather than layout-affecting properties.
-- [ ] Lighthouse-oriented review targets 90+ desktop and mobile scores.
-- [ ] No mandatory third-party image service or external visual asset dependency is introduced.
+- [x] Production build completes successfully.
+- [x] Tests/checks pass for implemented modules.
+- [x] Initial JavaScript and hydration are limited to high-value interactive islands.
+- [x] Animations primarily use transform and opacity rather than layout-affecting properties.
+- [x] Lighthouse-oriented review targets 90+ desktop and mobile scores.
+- [x] No mandatory third-party image service or external visual asset dependency is introduced.
+
+Notes:
+- Implemented with TDD quality gate tests in `tests/story-010-quality-gates.test.mjs`.
+- Homepage quality metadata lives in `src/pages/index.astro` via `data-quality-gate` and `data-performance-budget` markers.
+- Quality gate documentation lives in `README.md`.
+- Verification command: `npm run verify`.
 
 #### 011 — Design review against Patreon-inspired boundary
 
@@ -288,3 +312,7 @@ Acceptance criteria:
 - [x] 004 — Build generated media card system and visual collage primitives.
 - [x] 005 — Implement adaptive sticky header navigation.
 - [x] 006 — Implement hero visual composition and pointer motion system.
+- [x] 007 — Implement scroll-linked atmosphere/background system.
+- [x] 008 — Add section-level interaction polish.
+- [x] 009 — Accessibility and keyboard interaction hardening.
+- [x] 010 — Performance, build, and quality gate pass.

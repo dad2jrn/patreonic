@@ -10,6 +10,11 @@ type SectionContent = {
     cards: string[];
 };
 
+type FaqItem = {
+    question: string;
+    answer: string;
+};
+
 const sectionContent: Record<LandingSectionId, SectionContent> = {
     hero: {
         kicker: "Patreonic / Creator membership template",
@@ -86,6 +91,37 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
         cards: ["Astro-first", "No copied assets", "Ready for motion slices"],
     },
 };
+
+const faqItems: FaqItem[] = [
+    {
+        question: "Can I customize the copy?",
+        answer: "Yes. The starter copy is original placeholder marketing language designed to be replaced with your product positioning, creator segments, and launch proof.",
+    },
+    {
+        question: "Does this require a backend?",
+        answer: "No. Patreonic v1 is a static Astro landing template, so billing, authentication, checkout, and CMS data are intentionally outside this slice.",
+    },
+    {
+        question: "Is the visual direction original?",
+        answer: "Yes. The template uses generated CSS and HTML primitives with a distinct palette and layout direction rather than copied platform screenshots or assets.",
+    },
+];
+
+const getInteractionKind = (sectionId: LandingSectionId) => {
+    if (sectionId === "tiers") {
+        return "tier";
+    }
+
+    if (sectionId === "community") {
+        return "testimonial";
+    }
+
+    if (sectionId === "final-cta") {
+        return "final-cta";
+    }
+
+    return "card";
+};
 ---
 
 <html lang="en">
@@ -99,7 +135,15 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
         />
     </head>
     <body>
-        <header class="site-header" data-header>
+        <div
+            class="scroll-atmosphere"
+            data-scroll-atmosphere
+            data-active-theme={landingSections[0].backgroundTheme}
+            aria-hidden="true"
+        >
+        </div>
+        <a class="skip-link" href="#main-content">Skip to main content</a>
+        <header class="site-header" role="banner" data-header>
             <a class="site-brand" href="#hero" aria-label="Patreonic home">
                 Patreonic
             </a>
@@ -156,7 +200,13 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
                 }
             </nav>
         </header>
-        <main class="page-shell">
+        <main
+            id="main-content"
+            class="page-shell"
+            role="main"
+            data-quality-gate="limited-hydration"
+            data-performance-budget="static-astro-shell"
+        >
             {
                 landingSections.map((section) => {
                     const content = sectionContent[section.id];
@@ -165,12 +215,15 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
                         <section
                             id={section.id}
                             data-theme={section.backgroundTheme}
+                            aria-labelledby={`${section.id}-title`}
                             class={`page-section ${section.id === "hero" ? "hero-section" : ""}`}
                         >
                             <div class="section-copy">
                                 <p class="section-kicker">{content.kicker}</p>
-                                <h1>{content.title}</h1>
-                                <p>{content.body}</p>
+                                <h1 id={`${section.id}-title`}>
+                                    {content.title}
+                                </h1>
+                                <p data-essential-content>{content.body}</p>
                                 {section.id === "hero" && (
                                     <div
                                         class="hero-actions"
@@ -193,18 +246,48 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
                             </div>
                             <div
                                 class="section-grid"
+                                data-section-kind={section.id}
                                 aria-label={`${section.navLabel} highlights`}
+                                data-quality-gate="gpu-friendly-motion"
                             >
-                                {content.cards.map((card) => (
-                                    <article class="content-card">
-                                        <span>{card}</span>
-                                    </article>
-                                ))}
+                                {section.id === "faq" ? (
+                                    <div
+                                        class="faq-list"
+                                        aria-label="Frequently asked questions"
+                                    >
+                                        {faqItems.map((item) => (
+                                            <details
+                                                class="faq-panel"
+                                                data-faq-panel
+                                                data-section-interaction
+                                            >
+                                                <summary>
+                                                    {item.question}
+                                                </summary>
+                                                <p>{item.answer}</p>
+                                            </details>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    content.cards.map((card) => (
+                                        <article
+                                            class="content-card"
+                                            tabindex="0"
+                                            data-section-interaction
+                                            data-interaction-kind={getInteractionKind(
+                                                section.id,
+                                            )}
+                                        >
+                                            <span>{card}</span>
+                                        </article>
+                                    ))
+                                )}
                                 {section.id === "hero" && (
                                     <div
                                         class="media-collage hero-motion-field"
                                         aria-label="Generated creator media collage"
                                         data-hero-motion-field
+                                        data-quality-gate="no-external-assets"
                                     >
                                         {generatedMediaCards.map((card) => (
                                             <article
@@ -226,6 +309,12 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
                 })
             }
         </main>
+        <footer class="site-footer" role="contentinfo">
+            <p>
+                Patreonic is a static Astro landing template with original
+                generated visuals and accessible content structure.
+            </p>
+        </footer>
         <script>
             import { gsap } from "gsap";
 
@@ -234,14 +323,23 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
                 "[data-mobile-menu-toggle]",
             );
             const mobileMenu = document.querySelector("[data-mobile-menu]");
+            const focusableMobileMenuItems =
+                mobileMenu?.querySelectorAll<HTMLElement>("a, button") ?? [];
             const navLinks = document.querySelectorAll("[data-section-link]");
             const sections = document.querySelectorAll(".page-section[id]");
+            const atmosphere = document.querySelector<HTMLElement>(
+                "[data-scroll-atmosphere]",
+            );
             const heroMotionField = document.querySelector(
                 "[data-hero-motion-field]",
             );
             const heroMotionCards = document.querySelectorAll(
                 "[data-motion-depth]",
             );
+            const sectionInteractionItems =
+                document.querySelectorAll<HTMLElement>(
+                    "[data-section-interaction]",
+                );
 
             const setHeaderScrollState = () => {
                 header?.classList.toggle("is-scrolled", window.scrollY > 24);
@@ -257,15 +355,37 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
                         link.removeAttribute("aria-current");
                     }
                 });
+
+                const activeSection = document.getElementById(sectionId);
+                const activeTheme = activeSection?.getAttribute("data-theme");
+                if (activeTheme) {
+                    atmosphere?.setAttribute("data-active-theme", activeTheme);
+                }
             };
 
-            const setMobileMenuState = (isOpen: boolean) => {
+            let previouslyFocusedElement: Element | null = null;
+
+            const setMobileMenuState = (
+                isOpen: boolean,
+                options: { restoreFocus?: boolean } = {},
+            ) => {
+                if (isOpen) {
+                    previouslyFocusedElement = document.activeElement;
+                }
+
                 mobileToggle?.setAttribute("aria-expanded", String(isOpen));
                 mobileMenu?.classList.toggle("is-open", isOpen);
                 mobileMenu?.toggleAttribute("hidden", !isOpen);
                 document
                     .querySelector("main")
                     ?.toggleAttribute("inert", isOpen);
+
+                if (isOpen) {
+                    focusableMobileMenuItems[0]?.focus();
+                } else if (options.restoreFocus) {
+                    (previouslyFocusedElement as HTMLElement | null)?.focus?.();
+                    previouslyFocusedElement = null;
+                }
             };
 
             setHeaderScrollState();
@@ -292,11 +412,55 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
                 setMobileMenuState(isOpen);
             });
             navLinks.forEach((link) =>
-                link.addEventListener("click", () => setMobileMenuState(false)),
+                link.addEventListener("click", () =>
+                    setMobileMenuState(false, { restoreFocus: true }),
+                ),
             );
             window.addEventListener("keydown", (event) => {
                 if (event.key === "Escape") {
-                    setMobileMenuState(false);
+                    setMobileMenuState(false, { restoreFocus: true });
+                }
+
+                if (
+                    mobileToggle?.getAttribute("aria-expanded") === "true" &&
+                    event.key === "Tab" &&
+                    focusableMobileMenuItems.length > 0
+                ) {
+                    const firstItem = focusableMobileMenuItems[0];
+                    const lastItem =
+                        focusableMobileMenuItems[
+                            focusableMobileMenuItems.length - 1
+                        ];
+
+                    if (
+                        event.shiftKey &&
+                        document.activeElement === firstItem
+                    ) {
+                        event.preventDefault();
+                        lastItem.focus();
+                    } else if (
+                        !event.shiftKey &&
+                        document.activeElement === lastItem
+                    ) {
+                        event.preventDefault();
+                        firstItem.focus();
+                    }
+                }
+
+                if (event.key === "Home") {
+                    focusableMobileMenuItems[0]?.focus();
+                }
+
+                if (event.key === "End") {
+                    focusableMobileMenuItems[
+                        focusableMobileMenuItems.length - 1
+                    ]?.focus();
+                }
+
+                if (event.key === "Enter" || event.key === " ") {
+                    document.activeElement?.dispatchEvent(
+                        new Event("click", { bubbles: true }),
+                    );
                 }
             });
 
@@ -304,6 +468,89 @@ const sectionContent: Record<LandingSectionId, SectionContent> = {
             const reducedMotion = matchMedia(
                 "(prefers-reduced-motion: reduce)",
             );
+
+            sectionInteractionItems.forEach((item) => {
+                item.addEventListener("pointerdown", () => {
+                    item.classList.add("is-pressed");
+                });
+                item.addEventListener("pointerup", () => {
+                    item.classList.remove("is-pressed");
+                });
+                item.addEventListener("pointercancel", () => {
+                    item.classList.remove("is-pressed");
+                });
+                item.addEventListener("pointerleave", () => {
+                    item.classList.remove("is-pressed");
+                });
+            });
+
+            if (!reducedMotion.matches) {
+                const sectionInteractionObserver = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                gsap.fromTo(
+                                    entry.target,
+                                    { autoAlpha: 0, y: 22 },
+                                    {
+                                        autoAlpha: 1,
+                                        y: 0,
+                                        duration: 0.58,
+                                        ease: "power3.out",
+                                    },
+                                );
+                                sectionInteractionObserver.unobserve(
+                                    entry.target,
+                                );
+                            }
+                        });
+                    },
+                    { rootMargin: "0px 0px -12% 0px", threshold: 0.18 },
+                );
+
+                sectionInteractionItems.forEach((item) =>
+                    sectionInteractionObserver.observe(item),
+                );
+            }
+
+            let atmosphereFrame = 0;
+
+            const updateAtmosphereProgress = () => {
+                atmosphereFrame = 0;
+
+                if (!atmosphere || reducedMotion.matches) {
+                    return;
+                }
+
+                const scrollableDistance =
+                    document.documentElement.scrollHeight - window.innerHeight;
+                const progress =
+                    scrollableDistance > 0
+                        ? window.scrollY / scrollableDistance
+                        : 0;
+
+                atmosphere.style.setProperty(
+                    "--atmosphere-progress",
+                    progress.toFixed(3),
+                );
+                atmosphere.style.setProperty(
+                    "--atmosphere-drift",
+                    `${Math.round(progress * 80)}px`,
+                );
+            };
+
+            const scheduleAtmosphereProgress = () => {
+                if (!atmosphereFrame) {
+                    atmosphereFrame = requestAnimationFrame(
+                        updateAtmosphereProgress,
+                    );
+                }
+            };
+
+            updateAtmosphereProgress();
+            window.addEventListener("scroll", scheduleAtmosphereProgress, {
+                passive: true,
+            });
 
             const motionDepthSettings = {
                 foreground: { movement: 28, tilt: 7 },

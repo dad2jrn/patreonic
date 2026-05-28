@@ -109,3 +109,64 @@ Reason:
 Consequences:
 - Future hero motion refinements should preserve the depth metadata contract and avoid layout-affecting animation properties.
 - If hero interactions grow, the inline script can be extracted to a dedicated module or hydrated island, but the current slice keeps behavior colocated with the single-page template.
+
+### 2026-05-28 - Story 007 scroll-linked atmosphere/background system
+
+Decision:
+- Patreonic now renders a fixed, decorative `scroll-atmosphere` layer in `src/pages/index.astro`, initialized from the first section's registry-backed `backgroundTheme`.
+- The existing section observer updates the atmosphere layer's `data-active-theme` as major landing sections become active.
+- Scroll progress updates are scheduled with `requestAnimationFrame` and written to CSS custom properties (`--atmosphere-progress` and `--atmosphere-drift`) so atmospheric blobs move through transform/opacity-friendly CSS.
+- Reduced-motion users keep static/simplified atmosphere behavior through the global `prefers-reduced-motion: reduce` stylesheet rules.
+
+Reason:
+- Story 007 requires smooth, original section-driven background transitions without introducing external assets or layout-thrashing scroll handlers.
+- Reusing the section registry keeps atmosphere themes aligned with the same source of truth used by content and navigation.
+
+Consequences:
+- Future background or section-interaction work should extend the registry-backed theme contract rather than hard-coding per-section behavior elsewhere.
+- If scroll-linked behavior expands, the shared observer/scroll script can be extracted from `src/pages/index.astro` into a dedicated module while preserving the public `data-theme` and `data-active-theme` contract.
+
+### 2026-05-28 - Story 008 section-level interaction polish
+
+Decision:
+- Patreonic adds supporting-section interaction polish through semantic/static Astro markup, native FAQ `<details>` disclosures, and `data-section-interaction` / `data-interaction-kind` hooks in `src/pages/index.astro`.
+- The existing inline page script handles lightweight tap pressed state and GSAP entrance reveals for section interaction items, gated by `prefers-reduced-motion`.
+- Hover, focus, tap, tier, testimonial, final CTA, FAQ, coarse-pointer, and reduced-motion styles live in `src/styles/global.css` without adding new external assets or backend behavior.
+
+Reason:
+- Story 008 requires polished section interactions while preserving the Astro-first static page boundary and avoiding unnecessary React hydration for simple cards and native FAQ disclosure behavior.
+- Native `<details>` keeps FAQ open/close behavior accessible by default and supports later accessibility hardening.
+
+Consequences:
+- Later Story 009 accessibility work should review whether tabbable informational cards should become real links/buttons once destinations or actions exist.
+- If the shared inline script grows further, section interaction, navigation, hero motion, and atmosphere behavior are candidates for extraction into dedicated modules while preserving the public data-attribute contracts.
+
+### 2026-05-28 - Story 009 accessibility and keyboard interaction hardening
+
+Decision:
+- Patreonic now exposes explicit semantic landmarks in `src/pages/index.astro`: skip link, `role="banner"`, `role="main"`, `role="contentinfo"`, labelled sections, and `data-essential-content` markers for copy that must not depend on animation.
+- Mobile navigation now preserves the previously focused element, moves focus into the open menu, supports Tab wrapping, Escape close with focus restore, and Home/End keyboard shortcuts.
+- `src/styles/global.css` includes skip-link visibility, stronger FAQ summary focus treatment, expanded reduced-motion fallbacks, and a `prefers-contrast: more` pass.
+
+Reason:
+- Story 009 required hardening accessibility after motion, atmosphere, header, and section interaction slices were in place.
+- The current page can remain Astro-first and static while improving keyboard and assistive-technology behavior through semantic markup and lightweight browser scripting.
+
+Consequences:
+- Future real destinations or actions should replace generic tabbable informational cards with actual anchors/buttons.
+- If mobile navigation complexity grows further, the focus-management script is a candidate for extraction into a small module or island while preserving the public markup contract.
+
+### 2026-05-28 - Story 010 performance, build, and quality gates
+
+Decision:
+- Patreonic records performance/quality intent in homepage markup with `data-quality-gate` and `data-performance-budget` attributes for limited hydration, GPU-friendly motion, and no external generated-media assets.
+- `README.md` now documents the full verification command, limited-hydration boundary, transform/opacity animation preference, passive/`requestAnimationFrame` scroll work, and no mandatory third-party image service.
+- The local quality gate remains `npm run verify`, covering Vitest, `astro check`, and production `astro build`.
+
+Reason:
+- Story 010 required making production build readiness and performance assumptions observable and testable without adding external Lighthouse tooling to the local scaffold.
+- Keeping the current page free of Astro client hydration directives preserves the static-friendly v1 architecture while still allowing inline script interactions where they provide value.
+
+Consequences:
+- Browser-based Lighthouse review remains a human/release activity, especially for final desktop/mobile scoring.
+- Future interactive islands should be justified against the limited-hydration quality gate and covered by tests/docs when introduced.
