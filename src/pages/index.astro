@@ -1,6 +1,91 @@
 ---
-import { landingSections } from "../content/sections";
+import { generatedMediaCards } from "../content/media-cards";
+import { landingSections, type LandingSectionId } from "../content/sections";
 import "../styles/global.css";
+
+type SectionContent = {
+    kicker: string;
+    title: string;
+    body: string;
+    cards: string[];
+};
+
+const sectionContent: Record<LandingSectionId, SectionContent> = {
+    hero: {
+        kicker: "Patreonic / Creator membership template",
+        title: "Turn audience momentum into a membership home.",
+        body: "Patreonic gives creator-platform teams a polished, static-first landing page with confident messaging, flexible sections, and room for premium motion when the product is ready for it.",
+        cards: [
+            "Editorial launch page",
+            "Original creator-economy copy",
+            "Static-first Astro foundation",
+        ],
+    },
+    audiences: {
+        kicker: "Creator types and use cases",
+        title: "Shape one message for many creator businesses.",
+        body: "Speak to educators, podcasters, video teams, newsletter writers, and community builders without locking the template to one niche.",
+        cards: [
+            "Course communities",
+            "Paid newsletters",
+            "Private podcasts",
+            "Fan memberships",
+        ],
+    },
+    flow: {
+        kicker: "How Patreonic works",
+        title: "Explain the path from attention to recurring support.",
+        body: "A simple three-step story helps visitors understand how creators package work, invite supporters, and keep their community returning.",
+        cards: [
+            "Publish a home base",
+            "Package member value",
+            "Grow with community signals",
+        ],
+    },
+    features: {
+        kicker: "Feature showcase",
+        title: "Highlight the capabilities a modern membership product needs.",
+        body: "Use clear feature blocks for publishing, audience segmentation, community updates, creator analytics, and conversion-focused landing flows.",
+        cards: [
+            "Creator publishing",
+            "Audience insights",
+            "Member updates",
+            "Launch-ready sections",
+        ],
+    },
+    tiers: {
+        kicker: "Membership tier preview",
+        title: "Preview value without building checkout logic.",
+        body: "Show sample membership levels, benefit framing, and upgrade paths while keeping billing, authentication, and backend systems out of the v1 template.",
+        cards: ["Starter circle", "Studio pass", "Inner room"],
+    },
+    community: {
+        kicker: "Community proof",
+        title: "Make the product feel active before real customer data exists.",
+        body: "Original social-proof modules, creator testimonials, and community prompts provide believable structure that teams can replace with real evidence later.",
+        cards: [
+            "Creator testimonials",
+            "Member activity prompts",
+            "Trust-building proof points",
+        ],
+    },
+    faq: {
+        kicker: "Frequently asked questions",
+        title: "Handle objections before the final ask.",
+        body: "Answer practical questions about customization, static performance, visual originality, future motion work, and what is intentionally not included.",
+        cards: [
+            "Can I customize the copy?",
+            "Does this require a backend?",
+            "Is the visual direction original?",
+        ],
+    },
+    "final-cta": {
+        kicker: "Final CTA / Footer",
+        title: "Build a creator membership story that feels ready to ship.",
+        body: "Use Patreonic as the fast editorial starting point for a creator-platform landing page, then layer in generated visuals, navigation, and motion in later slices.",
+        cards: ["Astro-first", "No copied assets", "Ready for motion slices"],
+    },
+};
 ---
 
 <html lang="en">
@@ -14,30 +99,273 @@ import "../styles/global.css";
         />
     </head>
     <body>
+        <header class="site-header" data-header>
+            <a class="site-brand" href="#hero" aria-label="Patreonic home">
+                Patreonic
+            </a>
+            <nav class="desktop-nav" aria-label="Primary navigation">
+                {
+                    landingSections.map((section) => (
+                        <div class="nav-item">
+                            <a
+                                class="nav-link"
+                                href={`#${section.id}`}
+                                data-section-link={section.id}
+                            >
+                                {section.navLabel}
+                            </a>
+                            <div class="nav-menu-panel" data-nav-menu>
+                                <span>
+                                    {section.backgroundTheme.replace(
+                                        "theme-",
+                                        "",
+                                    )}
+                                </span>
+                                <strong>{section.navLabel} section</strong>
+                            </div>
+                        </div>
+                    ))
+                }
+            </nav>
+            <button
+                class="mobile-menu-toggle"
+                type="button"
+                aria-controls="mobile-navigation"
+                aria-expanded="false"
+                data-mobile-menu-toggle
+            >
+                Menu
+            </button>
+            <nav
+                id="mobile-navigation"
+                class="mobile-nav"
+                aria-label="Mobile navigation"
+                data-mobile-menu
+                hidden
+            >
+                {
+                    landingSections.map((section) => (
+                        <a
+                            class="mobile-nav-link"
+                            href={`#${section.id}`}
+                            data-section-link={section.id}
+                        >
+                            {section.navLabel}
+                        </a>
+                    ))
+                }
+            </nav>
+        </header>
         <main class="page-shell">
             {
-                landingSections.map((section) => (
-                    <section
-                        id={section.id}
-                        data-theme={section.backgroundTheme}
-                        class="page-section"
-                    >
-                        <p class="section-kicker">
-                            Patreonic / {section.navLabel}
-                        </p>
-                        <h1>
-                            {section.id === "hero"
-                                ? "A premium Astro landing shell for creator memberships."
-                                : `${section.navLabel} foundation`}
-                        </h1>
-                        <p>
-                            Placeholder section for the Patreonic single-page
-                            shell, ready for original creator-economy content
-                            and motion polish.
-                        </p>
-                    </section>
-                ))
+                landingSections.map((section) => {
+                    const content = sectionContent[section.id];
+
+                    return (
+                        <section
+                            id={section.id}
+                            data-theme={section.backgroundTheme}
+                            class={`page-section ${section.id === "hero" ? "hero-section" : ""}`}
+                        >
+                            <div class="section-copy">
+                                <p class="section-kicker">{content.kicker}</p>
+                                <h1>{content.title}</h1>
+                                <p>{content.body}</p>
+                                {section.id === "hero" && (
+                                    <div
+                                        class="hero-actions"
+                                        aria-label="Hero calls to action"
+                                    >
+                                        <a
+                                            class="button button-primary"
+                                            href="#final-cta"
+                                        >
+                                            Launch the template
+                                        </a>
+                                        <a
+                                            class="button button-secondary"
+                                            href="#audiences"
+                                        >
+                                            Explore the sections
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                            <div
+                                class="section-grid"
+                                aria-label={`${section.navLabel} highlights`}
+                            >
+                                {content.cards.map((card) => (
+                                    <article class="content-card">
+                                        <span>{card}</span>
+                                    </article>
+                                ))}
+                                {section.id === "hero" && (
+                                    <div
+                                        class="media-collage hero-motion-field"
+                                        aria-label="Generated creator media collage"
+                                        data-hero-motion-field
+                                    >
+                                        {generatedMediaCards.map((card) => (
+                                            <article
+                                                class={`generated-media-card motion-depth-${card.depth}`}
+                                                data-card-variant={card.variant}
+                                                data-motion-depth={card.depth}
+                                                style={`--resting-x: ${card.restingX}; --resting-y: ${card.restingY};`}
+                                            >
+                                                <p>{card.eyebrow}</p>
+                                                <h2>{card.title}</h2>
+                                                <span>{card.detail}</span>
+                                            </article>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                    );
+                })
             }
         </main>
+        <script>
+            import { gsap } from "gsap";
+
+            const header = document.querySelector("[data-header]");
+            const mobileToggle = document.querySelector(
+                "[data-mobile-menu-toggle]",
+            );
+            const mobileMenu = document.querySelector("[data-mobile-menu]");
+            const navLinks = document.querySelectorAll("[data-section-link]");
+            const sections = document.querySelectorAll(".page-section[id]");
+            const heroMotionField = document.querySelector(
+                "[data-hero-motion-field]",
+            );
+            const heroMotionCards = document.querySelectorAll(
+                "[data-motion-depth]",
+            );
+
+            const setHeaderScrollState = () => {
+                header?.classList.toggle("is-scrolled", window.scrollY > 24);
+            };
+
+            const setActiveSection = (sectionId: string) => {
+                navLinks.forEach((link) => {
+                    const isActive =
+                        link.getAttribute("data-section-link") === sectionId;
+                    if (isActive) {
+                        link.setAttribute("aria-current", "true");
+                    } else {
+                        link.removeAttribute("aria-current");
+                    }
+                });
+            };
+
+            const setMobileMenuState = (isOpen: boolean) => {
+                mobileToggle?.setAttribute("aria-expanded", String(isOpen));
+                mobileMenu?.classList.toggle("is-open", isOpen);
+                mobileMenu?.toggleAttribute("hidden", !isOpen);
+                document
+                    .querySelector("main")
+                    ?.toggleAttribute("inert", isOpen);
+            };
+
+            setHeaderScrollState();
+            window.addEventListener("scroll", setHeaderScrollState, {
+                passive: true,
+            });
+
+            const sectionObserver = new IntersectionObserver(
+                (entries) => {
+                    const visibleSection = entries.find(
+                        (entry) => entry.isIntersecting,
+                    );
+                    if (visibleSection?.target.id) {
+                        setActiveSection(visibleSection.target.id);
+                    }
+                },
+                { rootMargin: "-35% 0px -55% 0px", threshold: 0 },
+            );
+
+            sections.forEach((section) => sectionObserver.observe(section));
+            mobileToggle?.addEventListener("click", () => {
+                const isOpen =
+                    mobileToggle.getAttribute("aria-expanded") !== "true";
+                setMobileMenuState(isOpen);
+            });
+            navLinks.forEach((link) =>
+                link.addEventListener("click", () => setMobileMenuState(false)),
+            );
+            window.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    setMobileMenuState(false);
+                }
+            });
+
+            const finePointer = matchMedia("(pointer: fine)");
+            const reducedMotion = matchMedia(
+                "(prefers-reduced-motion: reduce)",
+            );
+
+            const motionDepthSettings = {
+                foreground: { movement: 28, tilt: 7 },
+                midground: { movement: 16, tilt: 4 },
+                background: { movement: 8, tilt: 2 },
+            };
+
+            const setHeroMotionToRest = () => {
+                heroMotionCards.forEach((card) => {
+                    gsap.to(card, {
+                        "--motion-x": "0px",
+                        "--motion-y": "0px",
+                        "--motion-tilt-x": "0deg",
+                        "--motion-tilt-y": "0deg",
+                        duration: 0.8,
+                        ease: "power3.out",
+                    });
+                });
+            };
+
+            if (
+                heroMotionField &&
+                finePointer.matches &&
+                !reducedMotion.matches
+            ) {
+                heroMotionField.addEventListener("pointermove", (event) => {
+                    const pointerEvent = event as PointerEvent;
+                    const bounds = heroMotionField.getBoundingClientRect();
+                    const xProgress =
+                        (pointerEvent.clientX - bounds.left) / bounds.width -
+                        0.5;
+                    const yProgress =
+                        (pointerEvent.clientY - bounds.top) / bounds.height -
+                        0.5;
+
+                    heroMotionCards.forEach((card) => {
+                        const depth =
+                            card.getAttribute("data-motion-depth") ??
+                            "background";
+                        const settings =
+                            motionDepthSettings[
+                                depth as keyof typeof motionDepthSettings
+                            ] ?? motionDepthSettings.background;
+
+                        gsap.to(card, {
+                            "--motion-x": `${xProgress * settings.movement}px`,
+                            "--motion-y": `${yProgress * settings.movement}px`,
+                            "--motion-tilt-x": `${yProgress * settings.tilt * -1}deg`,
+                            "--motion-tilt-y": `${xProgress * settings.tilt}deg`,
+                            duration: 0.55,
+                            ease: "power3.out",
+                        });
+                    });
+                });
+
+                heroMotionField.addEventListener(
+                    "pointerleave",
+                    setHeroMotionToRest,
+                );
+            } else {
+                setHeroMotionToRest();
+            }
+        </script>
     </body>
 </html>

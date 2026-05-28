@@ -1,8 +1,18 @@
 export type LandingSection = {
-    id: string;
+    id: LandingSectionId;
     navLabel: string;
     backgroundTheme: string;
 };
+
+export type LandingSectionId =
+    | "hero"
+    | "audiences"
+    | "flow"
+    | "features"
+    | "tiers"
+    | "community"
+    | "faq"
+    | "final-cta";
 
 export const landingSections = [
     { id: 'hero', navLabel: 'Home', backgroundTheme: 'theme-ember' },

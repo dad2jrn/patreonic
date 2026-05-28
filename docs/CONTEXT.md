@@ -55,7 +55,7 @@ None required for v1 scaffold.
 
 ## Data Model Notes
 
-No backend data model exists in the scaffold. Landing-page section metadata is represented by the Story 002 section registry in `src/content/sections.ts`, including stable anchor IDs, navigation labels, and background theme names.
+No backend data model exists in the scaffold. Landing-page section metadata is represented by the Story 002 section registry in `src/content/sections.ts`, including stable anchor IDs, navigation labels, background theme names, and a `LandingSectionId` union used by the Story 003 content skeleton. Static section copy currently lives in `src/pages/index.astro` and is keyed by the registry IDs. Story 004 generated media metadata lives in `src/content/media-cards.ts` with reusable creator/avatar, post, video/media, tier, stat, and community variants composed into the homepage as CSS/HTML-generated visual primitives. Story 005 header navigation also reads the same section registry to render desktop and mobile anchor links, active-section attributes, and dropdown panel labels. Story 006 extends the generated media card metadata with hero depth and resting-position fields so the homepage can render a layered GSAP pointer-motion field with foreground, midground, and background behavior.
 
 ## Security / Privacy Notes
 
@@ -63,4 +63,7 @@ The scaffold is a static site with no authentication, user data collection, chec
 
 ## Open Questions
 
-- Exact section copy, generated media primitives, and motion behavior remain for later content and interaction issues.
+- Motion behavior remains for later visual and interaction issues.
+- Story 003 copy is intentionally original starter copy and can be refined during later design/content passes.
+- Story 005 uses a small inline Astro page script for header scroll state, active section observation, and mobile menu state; later accessibility hardening can extract or replace it if navigation complexity grows.
+- Story 006 currently implements hero pointer motion in the same Astro page script using GSAP and CSS custom properties; later performance/accessibility hardening can extract it into a dedicated island or module if interaction complexity grows.

@@ -54,7 +54,7 @@ Notes:
 #### 003 — Create static landing-page content skeleton
 
 - Type: AFK
-- Status: Ready after 002
+- Status: Completed
 - Blocked by: 002 — Build design tokens, page shell, and section registry
 - User stories covered: 1, 2, 3, 11, 12, 13, 30, 31, 32, 33, 34, 35, 36, 37
 
@@ -62,16 +62,22 @@ What to build:
 - Render all v1 landing sections with original Patreonic copy and clear CTA structure before adding complex animation.
 
 Acceptance criteria:
-- [ ] Hero section renders original headline, supporting copy, and primary/secondary CTAs.
-- [ ] Creator Types / Use Cases, How It Works, Feature Showcase, Membership / Tier Preview, Community / Social Proof, Testimonials, FAQ, and Final CTA / Footer sections render.
-- [ ] All copy is original and does not reuse Patreon site content.
-- [ ] Sections are reachable through anchor IDs defined in the section registry.
-- [ ] The static page is responsive enough to validate content hierarchy on desktop and mobile.
+- [x] Hero section renders original headline, supporting copy, and primary/secondary CTAs.
+- [x] Creator Types / Use Cases, How It Works, Feature Showcase, Membership / Tier Preview, Community / Social Proof, Testimonials, FAQ, and Final CTA / Footer sections render.
+- [x] All copy is original and does not reuse Patreon site content.
+- [x] Sections are reachable through anchor IDs defined in the section registry.
+- [x] The static page is responsive enough to validate content hierarchy on desktop and mobile.
+
+Notes:
+- Implemented with TDD content skeleton tests in `tests/story-003-content-skeleton.test.mjs`.
+- Original section copy and CTA structure render through `src/pages/index.astro` using the Story 002 registry anchors.
+- Responsive content hierarchy classes live in `src/styles/global.css`.
+- Verification command: `npm run verify`.
 
 #### 004 — Build generated media card system and visual collage primitives
 
 - Type: AFK
-- Status: Ready after 002
+- Status: Completed
 - Blocked by: 002 — Build design tokens, page shell, and section registry
 - User stories covered: 38, 39, 40, 42, 49, 50
 
@@ -79,16 +85,22 @@ What to build:
 - Create reusable CSS/HTML-generated abstract creator/media cards and visual primitives for posts, creators, videos, tiers, stats, avatars, and community/media tiles.
 
 Acceptance criteria:
-- [ ] Media card variants exist for creator/avatar, post, video/media, tier, stat, and community concepts.
-- [ ] Cards use generated CSS/HTML visuals rather than external image services.
-- [ ] Visual style is original and distinguishable from Patreon assets.
-- [ ] Cards can be composed in the hero and supporting page sections.
-- [ ] Rendering tests or equivalent checks cover expected card variants.
+- [x] Media card variants exist for creator/avatar, post, video/media, tier, stat, and community concepts.
+- [x] Cards use generated CSS/HTML visuals rather than external image services.
+- [x] Visual style is original and distinguishable from Patreon assets.
+- [x] Cards can be composed in the hero and supporting page sections.
+- [x] Rendering tests or equivalent checks cover expected card variants.
+
+Notes:
+- Implemented with TDD generated media card tests in `tests/story-004-generated-media-cards.test.mjs`.
+- Reusable generated media metadata lives in `src/content/media-cards.ts` and is composed into the hero collage in `src/pages/index.astro`.
+- CSS-only visual primitives and variant treatments live in `src/styles/global.css`.
+- Verification command: `npm run verify`.
 
 #### 005 — Implement adaptive sticky header navigation
 
 - Type: AFK
-- Status: Ready after 002 and 003
+- Status: Completed
 - Blocked by:
   - 002 — Build design tokens, page shell, and section registry
   - 003 — Create static landing-page content skeleton
@@ -98,16 +110,22 @@ What to build:
 - Implement the sticky adaptive header with scroll-state styling, active section indication, animated desktop dropdowns, keyboard-accessible focus behavior, and animated mobile full-screen menu.
 
 Acceptance criteria:
-- [ ] Header starts airy/transparent over the hero and changes visual treatment after scroll.
-- [ ] Active section state updates as the user scrolls through registered sections.
-- [ ] Desktop navigation dropdowns or mega-menu panels open on hover and focus.
-- [ ] Mobile navigation opens/closes as an animated full-screen menu.
-- [ ] Keyboard users can operate nav dropdowns and mobile menu with visible focus states.
+- [x] Header starts airy/transparent over the hero and changes visual treatment after scroll.
+- [x] Active section state updates as the user scrolls through registered sections.
+- [x] Desktop navigation dropdowns or mega-menu panels open on hover and focus.
+- [x] Mobile navigation opens/closes as an animated full-screen menu.
+- [x] Keyboard users can operate nav dropdowns and mobile menu with visible focus states.
+
+Notes:
+- Implemented with TDD adaptive header tests in `tests/story-005-adaptive-header.test.mjs`.
+- Header markup and lightweight browser behavior live in `src/pages/index.astro`, reusing the Story 002 section registry.
+- Header, dropdown, active link, focus, and mobile menu styles live in `src/styles/global.css`.
+- Verification command: `npm run verify`.
 
 #### 006 — Implement hero visual composition and pointer motion system
 
 - Type: AFK
-- Status: Ready after 003 and 004
+- Status: Completed
 - Blocked by:
   - 003 — Create static landing-page content skeleton
   - 004 — Build generated media card system and visual collage primitives
@@ -117,12 +135,18 @@ What to build:
 - Create a Patreon-inspired but original hero composition with layered generated media visuals and GSAP-powered pointer parallax/tilt/depth behavior, including reset-on-leave, touch fallback, and reduced-motion fallback.
 
 Acceptance criteria:
-- [ ] Hero visual field uses original generated media/card elements.
-- [ ] Pointer movement creates smooth layered parallax and/or tilt behavior.
-- [ ] Foreground elements move more noticeably than background elements.
-- [ ] Elements ease back to their resting positions when the pointer leaves the hero.
-- [ ] Touch devices receive simplified ambient or static behavior.
-- [ ] Reduced-motion preference disables or significantly reduces hero motion.
+- [x] Hero visual field uses original generated media/card elements.
+- [x] Pointer movement creates smooth layered parallax and/or tilt behavior.
+- [x] Foreground elements move more noticeably than background elements.
+- [x] Elements ease back to their resting positions when the pointer leaves the hero.
+- [x] Touch devices receive simplified ambient or static behavior.
+- [x] Reduced-motion preference disables or significantly reduces hero motion.
+
+Notes:
+- Implemented with TDD hero motion tests in `tests/story-006-hero-motion.test.mjs`.
+- Hero depth and resting-position metadata lives in `src/content/media-cards.ts` and renders through the hero collage in `src/pages/index.astro`.
+- GSAP pointer parallax/tilt, reset-on-leave, touch fallback, and reduced-motion fallback are implemented with CSS custom properties and styles in `src/styles/global.css`.
+- Verification command: `npm run verify`.
 
 #### 007 — Implement scroll-linked atmosphere/background system
 
@@ -260,3 +284,7 @@ Acceptance criteria:
 - [x] Convert PRD into vertical-slice implementation issues in this task list.
 - [x] 001 — Scaffold Astro-first Patreonic app shell.
 - [x] 002 — Build design tokens, page shell, and section registry.
+- [x] 003 — Create static landing-page content skeleton.
+- [x] 004 — Build generated media card system and visual collage primitives.
+- [x] 005 — Implement adaptive sticky header navigation.
+- [x] 006 — Implement hero visual composition and pointer motion system.
